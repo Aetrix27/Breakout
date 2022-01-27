@@ -21,7 +21,8 @@ let score = 0;
 let lives = 3;
 const bricks = [];
 
-//Init brick array
+//Init brick array  
+
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
   for (let r = 0; r < brickRowCount; r += 1) {
@@ -80,7 +81,7 @@ function collisionDetection() {
 
 function drawBall() {
   ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
   ctx.fillStyle = '#0095DD';
   ctx.fill();
   ctx.closePath();
@@ -93,8 +94,9 @@ function drawPaddle() {
   ctx.closePath();
 }
 function drawBricks() {
-  let c = 0
-  let r = 0
+  let c = 0;
+  let r = 0;
+  let innerCounter = 0;
   for (c = 0; c < brickColumnCount; c += 1) {
     for (r = 0; r < brickRowCount; r += 1) {
       if (bricks[c][r].status == 1) {
@@ -104,26 +106,33 @@ function drawBricks() {
         bricks[c][r].y = brickY;
         ctx.beginPath();
         ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        if (r === 0) {
-          ctx.fillStyle = '#FFB200';
-        }
-        if (r === 1) {
-          ctx.fillStyle = '#FF0000';
-        }
-        if (r === 2) {
-          ctx.fillStyle = '#0055FF';
-        }
-        if (r === 3) {
-          ctx.fillStyle = '#D100FF';
-        }
-        if (r === 4) {
-          ctx.fillStyle = '#00FF3A';
+
+        if (innerCounter % 2 === 0) {
+          ctx.fillStyle = 'brown';
+        } else {
+          if (r === 0) {
+            ctx.fillStyle = '#FFB200';
+          }
+          else if (r === 1) {
+            ctx.fillStyle = '#FF0000';
+          }
+          else if (r === 2) {
+            ctx.fillStyle = '#0055FF';
+          }
+          else if (r === 3) {
+            ctx.fillStyle = '#D100FF';
+          }
+          else if (r === 4) {
+            ctx.fillStyle = '#00FF3A';
+          }
         }
         ctx.fill();
         ctx.closePath();
       }
-      }
+
+      innerCounter += 1;
     }
+  }
 }
 function drawScore() {
   ctx.font = '16px Arial';
@@ -154,14 +163,12 @@ function draw() {
   else if (y + dy > canvas.height-ballRadius) {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
-    }
-    else {
-      lives--;
+    } else {
+      lives -= 1;
       if (!lives) {
         alert('GAME OVER');
         document.location.reload();
-      }
-      else {
+      } else {
         x = canvas.width / 2;
         y = canvas.height-30;
         dx = 3;
